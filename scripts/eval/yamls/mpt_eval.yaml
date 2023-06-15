@@ -1,7 +1,7 @@
 max_seq_len: 2048
 tokenizer_name: EleutherAI/gpt-neox-20b
 seed: 1
-precision: fp32
+precision: amp_fp16
 
 # Tokenizer
 tokenizer:
@@ -14,7 +14,7 @@ model:
   init_device: meta
   d_model: 768
   n_heads: 12
-  n_layers: 12
+  n_layers: 12 
   expansion_ratio: 4
   max_seq_len: ${max_seq_len}
   vocab_size: 50368

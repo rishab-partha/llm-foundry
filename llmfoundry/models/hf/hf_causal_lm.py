@@ -11,6 +11,7 @@ from composer.metrics.nlp import (InContextLearningLMAccuracy,
                                   InContextLearningMCExpectedCalibrationError,
                                   InContextLearningMultipleChoiceAccuracy,
                                   InContextLearningQAAccuracy,
+                                  InContextLearningCodeEvalAccuracy,
                                   LanguageCrossEntropy, LanguagePerplexity)
 from composer.utils import dist
 from omegaconf import DictConfig
@@ -83,8 +84,10 @@ class ComposerHFCausalLM(HuggingFaceModelWithZLoss):
             InContextLearningLMAccuracy(),
             InContextLearningMultipleChoiceAccuracy(),
             InContextLearningQAAccuracy(),
+            InContextLearningCodeEvalAccuracy(),
             InContextLearningLMExpectedCalibrationError(),
-            InContextLearningMCExpectedCalibrationError()
+            InContextLearningMCExpectedCalibrationError(),
+
         ]
 
         init_device = om_model_config.get('init_device', 'cpu')
