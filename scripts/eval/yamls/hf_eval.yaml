@@ -1,6 +1,6 @@
 max_seq_len: 2048
 seed: 1
-model_name_or_path: mosaicml/mpt-7b
+model_name_or_path: mosaicml/mpt-30b-chat
 precision: amp_fp16
 
 # Tokenizer
