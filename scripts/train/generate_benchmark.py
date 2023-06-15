@@ -31,6 +31,7 @@ def main(cfg):
     fsdp_config = cfg.get('fsdp_config', None)
     fsdp_config = om.to_container(fsdp_config,
                                   resolve=True) if fsdp_config else None
+    dist.initialize_dist(get_device(None), timeout=80.0)
     if dist.get_world_size() == 1 and fsdp_config is not None:
         warnings.warn(
             'FSDP is not applicable for single-GPU training. Reverting to DDP.')
