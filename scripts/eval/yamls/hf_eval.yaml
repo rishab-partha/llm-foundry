@@ -15,7 +15,7 @@ model:
   name: hf_causal_lm
   pretrained_model_name_or_path: ${model_name_or_path}
   use_auth_token: True
-  init_device: cpu
+  init_device: mixed
   pretrained: true
 
 load_path: # Add your (optional) Composer checkpoint path here!
