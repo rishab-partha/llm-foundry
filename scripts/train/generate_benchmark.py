@@ -7,7 +7,7 @@ import warnings
 from composer import Trainer
 from composer.core import Evaluator
 from composer.utils import dist, get_device, reproducibility
-sys.path.insert(1, '/mnt/workdisk/rishab/composer/tests/datasets')
+sys.path.insert(1, '/composer/tests/datasets')
 from code_eval_inputs import get_code_eval_inputs
 from omegaconf import OmegaConf as om
 from composer.loggers import WandBLogger
