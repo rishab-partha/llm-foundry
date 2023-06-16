@@ -1,6 +1,6 @@
 max_seq_len: 2048
 seed: 1
-model_name_or_path: mosaicml/mpt-30b-chat
+model_name_or_path: huggyllama/llama-30b
 precision: amp_fp16
 
 # Tokenizer
@@ -9,12 +9,13 @@ tokenizer:
   use_auth_token: True
   kwargs:
     model_max_length: ${max_seq_len}
+    trust_remote_code: True
 
 model:
   name: hf_causal_lm
   pretrained_model_name_or_path: ${model_name_or_path}
   use_auth_token: True
-  init_device: cpu
+  init_device: mixed
   pretrained: true
 
 load_path: # Add your (optional) Composer checkpoint path here!
