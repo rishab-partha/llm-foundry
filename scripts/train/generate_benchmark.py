@@ -38,7 +38,7 @@ def main(cfg):
         cfg.pop('fsdp_config')
         fsdp_config = None
     
-    eval_dataloader = get_code_eval_inputs()
+    eval_dataloader = get_code_eval_inputs(cfg.tokenizer.name)
     tokenizer = build_tokenizer(cfg.tokenizer)
     trainer = Trainer(
             run_name='benchmark_generate_fsdp',
