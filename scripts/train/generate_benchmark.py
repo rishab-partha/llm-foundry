@@ -47,7 +47,6 @@ def main(cfg):
             precision=cfg.precision,
             dist_timeout = 80.0,
             load_weights_only=True,
-            sync_module_states=True,
             eval_dataloader = Evaluator(label = 'metric', dataloader=eval_dataloader, metric_names = ['InContextLearningCodeEvalAccuracy']),
             loggers = [WandBLogger(project='rishab-mosaicml-tests', entity='mosaic-ml')]
         )
