@@ -108,7 +108,6 @@ class ComposerHFCausalLM(HuggingFaceModelWithZLoss):
                     om_model_config.pretrained_model_name_or_path,
                     trust_remote_code=trust_remote_code,
                     use_auth_token=use_auth_token,
-                    tie_embedding_weights=False,
                     config=config)
             else:
                 model = AutoModelForCausalLM.from_config(
