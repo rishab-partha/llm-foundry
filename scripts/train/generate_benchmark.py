@@ -7,6 +7,7 @@ import warnings
 from composer import Trainer
 from composer.core import Evaluator
 from composer.utils import dist, get_device, reproducibility
+from composer.callbacks import MemoryMonitor
 sys.path.insert(1, '/composer/tests/datasets')
 from code_eval_inputs import get_code_eval_inputs
 from omegaconf import OmegaConf as om
@@ -48,7 +49,8 @@ def main(cfg):
             dist_timeout = 80.0,
             load_weights_only=True,
             eval_dataloader = Evaluator(label = 'metric', dataloader=eval_dataloader, metric_names = ['InContextLearningCodeEvalAccuracy']),
-            loggers = [WandBLogger(project='rishab-mosaicml-tests', entity='mosaic-ml')]
+            loggers = [WandBLogger(project='rishab-mosaicml-tests', entity='mosaic-ml')],
+            callbacks = [MemoryMonitor()],
         )
 
     torch.cuda.empty_cache()
