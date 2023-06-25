@@ -8,27 +8,13 @@ from collections import defaultdict
 import re
 
 from composer.core import Callback, State
-from composer.loggers import Logger, WandBLogger
-from composer.utils import dist, ensure_tuple
+from composer.loggers import Logger
 from transformers import PreTrainedTokenizer, PreTrainedTokenizerFast
 
 Tokenizer = Union[PreTrainedTokenizer, PreTrainedTokenizerFast]
 
 
 class AverageICLLogger(Callback):
-
-    def __init__(self):
-        """Averages different icl task performance for same # shots.
-
-        Args: 
-        """
-        self.wandb_logger = None
-
-    def init(self, state: State, logger: Logger):
-        if dist.get_global_rank() == 0:
-            for destination in ensure_tuple(logger.destinations):
-                if isinstance(destination, WandBLogger):
-                    self.wandb_logger = destination
 
     def eval_after_all(self, state: State, logger: Logger):
         eval_metrics = copy.deepcopy(state.eval_metrics)
@@ -44,3 +30,4 @@ class AverageICLLogger(Callback):
             f"metrics/icl/{num_shot}-shot/avg": sum(perfs) / len(perfs)
             for num_shot, perfs in num_shot_avgs.items()
         }
+        logger.log_metrics(num_shot_avgs)
