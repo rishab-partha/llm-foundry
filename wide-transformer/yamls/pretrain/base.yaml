@@ -152,8 +152,6 @@ parameters:
       shuffle: true
       shuffle_algo: py1b
       shuffle_seed: ${global_seed}
-      drop_last: true
-      num_workers: 8
       local: /tmp/dataset/train_pile
       remote: oci://mosaicml-internal-dataset-pile/pre-concat/gpt-neox-20b-seqlen-2048/
       split: train
