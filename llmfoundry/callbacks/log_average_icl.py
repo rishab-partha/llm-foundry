@@ -6,8 +6,7 @@ from typing import Union
 import copy
 from collections import defaultdict
 import re
-
-from composer.core import Callback, State
+from composer.core import Callback, State, Event
 from composer.loggers import Logger
 from transformers import PreTrainedTokenizer, PreTrainedTokenizerFast
 
@@ -16,11 +15,14 @@ Tokenizer = Union[PreTrainedTokenizer, PreTrainedTokenizerFast]
 
 class AverageICLLogger(Callback):
 
-    def eval_after_all(self, state: State, logger: Logger):
+    def run_event(self, event: Event, state: State, logger: Logger):
+        if event != Event.FIT_START and event != Event.EVAL_AFTER_ALL:
+            return
+
         eval_metrics = copy.deepcopy(state.eval_metrics)
         num_shot_avgs = defaultdict(list)
-        for _, metrics in eval_metrics.items():
-            for metric_name, metric_val in metrics.items():
+        for metric_name, metrics in eval_metrics.items():
+            for _, metric_val in metrics.items():
                 match = re.search(r"(\d+)-shot", metric_name)
                 if not match:
                     continue
