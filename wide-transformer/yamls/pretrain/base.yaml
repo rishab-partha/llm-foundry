@@ -1,40 +1,38 @@
 name: wide-transformer-scaling
 
 integrations:
--
-  integration_type: git_repo
-  git_branch: wide-transformer-scaling
-  git_repo: rishab-partha/llm-foundry
-  pip_install: .[gpu]
-  ssh_clone: false
--
-  integration_type: wandb
-  entity: mosaic-ml
-  project: customer-project
+  - integration_type: git_repo
+    git_branch: wide-transformer-scaling
+    git_repo: rishab-partha/llm-foundry
+    pip_install: .[gpu]
+    ssh_clone: false
+  - integration_type: wandb
+    entity: mosaic-ml
+    project: wide-transformer
 
-image: mosaicml/pytorch:1.13.1_cu117-python3.10-ubuntu20.04
-cluster: r7z2
-gpu_type: a100_40gb
-gpu_num: 64 # update for hero run
+image: mosaicml/llm-foundry:1.13.1_cu117-latest
+cluster: # Set in launch script 
+gpu_type: # Set in launch script
+gpu_num: # Set in launch script
 
 command: |-
   cd llm-foundry/scripts
   composer train/train.py /mnt/config/parameters.yaml || (echo "Command failed - killing python" && pkill python && exit 1)
 
 parameters:
-  global_seed: 17
+  global_seed: # Set in launch script
   max_seq_len: 2048 # max tokens per sequence during training
 
   # Model
   model:
     name: mpt_causal_lm
     init_device: meta
-    d_model: 2048
+    d_model: # Set in launch script
     n_heads: 16
-    n_layers: 24
-    expansion_ratio: 4 # update w/ spreadsheet
+    n_layers: # Set in launch script
+    expansion_ratio: # Set in launch script
     max_seq_len: ${max_seq_len}
-    vocab_size: 50368 # update for hero run with custom tokenizer
+    vocab_size: 50432 # update for hero run with custom tokenizer
     no_bias: true
     attn_config:
       alibi: true
@@ -50,7 +48,7 @@ parameters:
 
   # Optimization
   global_train_batch_size: 512 # ~2M tokens, update for hero run, must be divisible by gpu_num
-  max_duration: 26000ba # update for hero run, e.g. 500000ba ~= 1T tokens
+  max_duration: 25000ba # update for hero run, e.g. 500000ba ~= 1T tokens
 
   optimizer:
     name: decoupled_lionw
@@ -62,14 +60,14 @@ parameters:
 
   scheduler:
     name: cosine_with_warmup
-    t_warmup: 4000ba
+    t_warmup: 0.06dur
     alpha_f: 0.1
 
   # System
   seed: ${global_seed}
   precision: amp_bf16
-  device_train_microbatch_size: 8
-  device_eval_batch_size: 8
+  device_train_microbatch_size: # Set in launch script
+  device_eval_batch_size: # Set in launch script
 
   # FSDP
   fsdp_config:
@@ -93,16 +91,14 @@ parameters:
     wandb: 
       group: ${run_name}
       project: wide-transformer
-      tags:
-      - 1B
-      - wide-transformer
-  run_name: 1B-wide-transformer-depth-24-expansion-4-test 
+      tags: # Set in launch script
+  run_name: # Set in launch script
 
   # Checkpointing
   autoresume: true
   save_filename: ep{epoch}-ba{batch}/rank{rank}.pt
-  save_folder: oci://mosaicml-internal-checkpoints/rishab/wide-transformer/1b-runs/${run_name}-seed-${global_seed} # update for hero run
-  save_interval: 2000ba # update for hero run, e.g. 2000ba
+  save_folder: oci://mosaicml-internal-checkpoints/rishab/wide-transformer/${run_name}-seed-${global_seed} # update for hero run
+  save_interval: 1000ba # update for hero run, e.g. 2000ba
   save_num_checkpoints_to_keep: 1
 
   # Algos and Callbacks
@@ -114,10 +110,6 @@ parameters:
   callbacks:
     lr_monitor: {}
     memory_monitor: {}
-    # mono_ckpt_saver:
-    #   batch_interval: ${save_interval}
-    #   filename: ep{epoch}-ba{batch}/mono.pt
-    #   save_folder: ${save_folder}
     runtime_estimator: {}
     scheduled_gc:
       batch_interval: 2000
@@ -140,13 +132,13 @@ parameters:
       shuffle: false
       shuffle_algo: py1b
       shuffle_seed: ${global_seed}
-      local: /tmp/dataset/val_c4
-      remote: oci://mosaicml-internal-dataset-pile/preconcat-gpt_neox/
+      local: /tmp/dataset/val_pile
+      remote: oci://mosaicml-internal-dataset-pile/pre-concat/gpt-neox-20b-seqlen-2048/
       split: val
 
 
   # In-context-learning tasks
-  icl_tasks: 'eval/yamls/tasks.yaml'
+  icl_tasks: eval/yamls/wide_tasks.yaml
 
   # Train loader
   train_loader:
@@ -162,5 +154,6 @@ parameters:
       shuffle_seed: ${global_seed}
       drop_last: true
       num_workers: 8
-      streams:
-        # @zack pls fill in
+      local: /tmp/dataset/train_pile
+      remote: oci://mosaicml-internal-dataset-pile/pre-concat/gpt-neox-20b-seqlen-2048/
+      split: train
