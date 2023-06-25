@@ -56,7 +56,7 @@ if __name__ == "__main__":
             device_batch_size = 16
         else:
             gpu_type = "a100_40gb"
-            device_batch_size = 8
+            device_batch_size = 4
 
         base_run.gpu_type = gpu_type
         base_run.parameters["device_train_microbatch_size"] = device_batch_size

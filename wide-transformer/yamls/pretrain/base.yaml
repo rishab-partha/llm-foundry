@@ -115,6 +115,11 @@ parameters:
       batch_interval: 2000
     speed_monitor:
       window_size: 1
+    average_icl_logger:
+      num-shots:
+       - 0
+       - 5
+
 
   # Dataloaders
   eos_token_id: 0 # update for hero run with custom tokenizer

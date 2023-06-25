@@ -21,8 +21,9 @@ from omegaconf import OmegaConf as om
 from transformers import (AutoTokenizer, PreTrainedTokenizer,
                           PreTrainedTokenizerFast)
 
-from llmfoundry.callbacks import (FDiffMetrics, Generate, GlobalLRScaling,
-                                  LayerFreezing, MonolithicCheckpointSaver,
+from llmfoundry.callbacks import (FDiffMetrics, Generate, AverageICLLogger,
+                                  GlobalLRScaling, LayerFreezing,
+                                  MonolithicCheckpointSaver,
                                   ScheduledGarbageCollector)
 from llmfoundry.optim import (DecoupledAdaLRLion, DecoupledClipLion,
                               DecoupledLionW)
@@ -33,6 +34,8 @@ Tokenizer = Union[PreTrainedTokenizer, PreTrainedTokenizerFast]
 def build_callback(name, kwargs):
     if name == 'lr_monitor':
         return LRMonitor()
+    if name == 'average_icl_logger':
+        return AverageICLLogger(**kwargs)
     elif name == 'memory_monitor':
         return MemoryMonitor()
     elif name == 'speed_monitor':
