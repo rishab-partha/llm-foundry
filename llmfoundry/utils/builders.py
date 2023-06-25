@@ -35,7 +35,7 @@ def build_callback(name, kwargs):
     if name == 'lr_monitor':
         return LRMonitor()
     if name == 'average_icl_logger':
-        return AverageICLLogger(**kwargs)
+        return AverageICLLogger()
     elif name == 'memory_monitor':
         return MemoryMonitor()
     elif name == 'speed_monitor':
