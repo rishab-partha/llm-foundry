@@ -1,0 +1,132 @@
+name: wide-transformer-scaling
+
+integrations:
+  - integration_type: git_repo
+    git_branch: wide-transformer-scaling
+    git_repo: rishab-partha/llm-foundry
+    pip_install: .[gpu]
+    ssh_clone: false
+  - integration_type: wandb
+    entity: mosaic-ml
+    project: wide-transformer
+
+image: mosaicml/llm-foundry:2.0.1_cu118-latest
+cluster: # Set in launch script 
+gpu_type: # Set in launch script
+gpu_num: # Set in launch script
+
+command: |-
+  cd llm-foundry/scripts
+  composer train/train.py /mnt/config/parameters.yaml || (echo "Command failed - killing python" && pkill python && exit 1)
+
+parameters:
+  global_seed: # Set in launch script
+  max_seq_len: 2048 # max tokens per sequence during training
+
+  # Model
+  model:
+    name: mpt_causal_lm
+    init_device: meta
+    d_model: # Set in launch script
+    n_heads: 16
+    n_layers: # Set in launch script
+    expansion_ratio: # Set in launch script
+    max_seq_len: ${max_seq_len}
+    vocab_size: 50432 # update for hero run with custom tokenizer
+    no_bias: true
+    attn_config:
+      alibi: true
+      attn_impl: triton
+      clip_qkv: 6
+      attn_uses_sequence_id: true
+
+  # Tokenizer
+  tokenizer:
+    name: EleutherAI/gpt-neox-20b
+    kwargs:
+      model_max_length: ${max_seq_len}
+
+  # Optimization
+  global_train_batch_size: 512 # ~2M tokens, update for hero run, must be divisible by gpu_num
+  max_duration: 500ba # Shortened schedule since just need to comp. throughput
+
+  optimizer:
+    name: decoupled_lionw
+    lr: 0.0002
+    betas:
+    - 0.9
+    - 0.95
+    weight_decay: 0.0002
+
+  scheduler:
+    name: cosine_with_warmup
+    t_warmup: 0.06dur
+    alpha_f: 0.1
+
+  # System
+  seed: ${global_seed}
+  precision: amp_bf16
+  device_train_microbatch_size: # Set in launch script
+
+  # FSDP
+  fsdp_config:
+    activation_checkpointing: false
+    activation_checkpointing_reentrant: false
+    activation_cpu_offload: false
+    limit_all_gathers: true
+    mixed_precision: PURE
+    sharding_strategy: FULL_SHARD
+    state_dict_type: full
+    verbose: false
+
+  # Logging
+  eval_first: false
+  eval_interval: 1 # Longer than train dur since don't need to eval
+  log_to_console: true
+  console_log_interval: 50ba
+  progress_bar: false
+  python_log_level: DEBUG
+  loggers:
+    wandb: 
+      group: ${run_name}
+      project: wide-transformer
+      tags: # Set in launch script
+  run_name: # Set in launch script
+
+  # Algos and Callbacks
+  algorithms:
+    gradient_clipping:
+      clipping_threshold: 1
+      clipping_type: norm
+
+  callbacks:
+    lr_monitor: {}
+    memory_monitor: {}
+    scheduled_gc:
+      batch_interval: 2000
+    speed_monitor:
+      window_size: 1
+    average_icl_logger: {}
+
+
+  # Dataloaders
+  eos_token_id: 0 # update for hero run with custom tokenizer
+  num_canonical_nodes: 128 # update for hero run, must be codivisible by # physical nodes
+
+
+
+  # Train loader
+  train_loader:
+    name: text
+    drop_last: true
+    num_workers: 8
+    dataset:
+      eos_token_id: ${eos_token_id}
+      max_seq_len: ${max_seq_len}
+      num_canonical_nodes: ${num_canonical_nodes}
+      shuffle: true
+      shuffle_algo: py1b
+      shuffle_seed: ${global_seed}
+      local: /tmp/dataset/train_pile
+      remote: oci://mosaicml-internal-dataset-pile/pre-concat/gpt-neox-20b-seqlen-2048/
+      split: train
