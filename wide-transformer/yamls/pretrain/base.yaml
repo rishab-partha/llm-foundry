@@ -48,7 +48,7 @@ parameters:
 
   # Optimization
   global_train_batch_size: 512 # ~2M tokens, update for hero run, must be divisible by gpu_num
-  max_duration: 25000ba # update for hero run, e.g. 500000ba ~= 1T tokens
+  max_duration: # Set in launch script (26 * num params)
 
   optimizer:
     name: decoupled_lionw
@@ -140,7 +140,7 @@ parameters:
 
 
   # In-context-learning tasks
-  icl_tasks: eval/yamls/wide_tasks.yaml
+  icl_tasks: eval/yamls/1b_wide_tasks.yaml
 
   # Train loader
   train_loader:
