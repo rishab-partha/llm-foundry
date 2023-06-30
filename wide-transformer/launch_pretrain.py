@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    run_base = f"1B-dmodel-{args.d_model}-layers-{args.n_layers}-expansion-{args.expansion_ratio}"
+    run_base = f"1B-dmodel-{args.d_model}-layers-{args.n_layers}-expansion-{args.expansion_ratio}-heads-{args.n_heads}"
 
     for seed in args.seeds:
         for lr in args.lrs:
