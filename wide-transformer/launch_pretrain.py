@@ -16,7 +16,7 @@ if __name__ == "__main__":
     parser.add_argument("--local-debug", action="store_true")
 
     # Model args
-    parser.add_argument("--lrs", nargs="+", type=float, default=[4e-4, 2e-4])
+    parser.add_argument("--lrs", nargs="+", type=float, default=[4e-4, 2e-4, 1e-4])
     parser.add_argument("--batches", type=int ,required=True)
     parser.add_argument("--d-model", type=int, required=True)
     parser.add_argument("--n-layers", type=int, required=True)
