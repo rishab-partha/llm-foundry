@@ -20,6 +20,7 @@ if __name__ == "__main__":
     parser.add_argument("--batches", type=int ,required=True)
     parser.add_argument("--d-model", type=int, required=True)
     parser.add_argument("--n-layers", type=int, required=True)
+    parser.add_argument("--n-heads", type=int, default=32)
     parser.add_argument("--expansion-ratio", type=int, required=True)
 
     args = parser.parse_args()
@@ -38,6 +39,7 @@ if __name__ == "__main__":
             base_run.parameters["model"]["d_model"] = args.d_model
             base_run.parameters["model"]["n_layers"] = args.n_layers
             base_run.parameters["model"]["expansion_ratio"] = args.expansion_ratio
+            base_run.parameters["model"]["n_heads"] = args.n_heads
 
             base_run.parameters["optimizer"]["lr"] = lr
             base_run.parameters["optimizer"]["weight_decay"] = lr # Using lion so lr / wd are the same
@@ -57,7 +59,7 @@ if __name__ == "__main__":
 
             base_run.parameters["loggers"]["wandb"]["tags"] = [
                 "1B", "pile", f"dmodel-{args.d_model}", f"layers-{args.n_layers}",
-                f"expansion-{args.expansion_ratio}", f"lr-{lr}"
+                f"expansion-{args.expansion_ratio}", f"lr-{lr}", "vary-dim", f"nheads-{args.n_heads}"
             ]
 
             if args.cluster in ["r1z1", "r8z6"]:
