@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    run_base = f"profile-1B-dmodel-{args.d_model}-layers-{args.n_layers}-expansion-{args.expansion_ratio}"
+    run_base = f"profile-1B-dmodel-{args.d_model}-layers-{args.n_layers}-expansion-{args.expansion_ratio}-heads-{args.n_heads}"
 
     for seed in args.seeds:
         base_run = RunConfig.from_file(
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
         base_run.parameters["loggers"]["wandb"]["tags"] = ["benchmark",
             "1B", f"dmodel-{args.d_model}", f"layers-{args.n_layers}",
-            f"expansion-{args.expansion_ratio}"
+            f"expansion-{args.expansion_ratio}", f"num_heads-{args.n_heads}"
         ]
 
         if args.cluster in ["r1z1", "r8z6"]:
