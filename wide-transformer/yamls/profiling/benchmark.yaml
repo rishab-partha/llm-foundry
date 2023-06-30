@@ -28,7 +28,7 @@ parameters:
     name: mpt_causal_lm
     init_device: meta
     d_model: # Set in launch script
-    n_heads: 16
+    n_heads: # Set in launch script
     n_layers: # Set in launch script
     expansion_ratio: # Set in launch script
     max_seq_len: ${max_seq_len}
