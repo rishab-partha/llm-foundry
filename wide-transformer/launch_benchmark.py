@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
         base_run.parameters["loggers"]["wandb"]["tags"] = ["benchmark",
             "1B", f"dmodel-{args.d_model}", f"layers-{args.n_layers}",
-            f"expansion-{args.expansion_ratio}", f"num_heads-{args.n_heads}"
+            f"expansion-{args.expansion_ratio}", f"num_heads-{args.n_heads}", "vary-dim"
         ]
 
         if args.cluster in ["r1z1", "r8z6"]:
