@@ -3,19 +3,59 @@ seed: 1
 precision: amp_fp16
 
 # If you are using one model, put it here:
-model_name_or_path: EleutherAI/gpt-neo-125m
 # otherwise, write a block for each model you want to test in the `models` section
 
 models:
 -
-  model_name: ${model_name_or_path}
+  model_name: meta-llama/Llama-2-7b-hf
   model:
     name: hf_causal_lm
-    pretrained_model_name_or_path: ${model_name_or_path}
-    init_device: cpu
+    pretrained_model_name_or_path: meta-llama/Llama-2-7b-hf
+    init_device: mixed
     pretrained: true
+    trust_remote_code: true
+    use_auth_token: true
   tokenizer:
-    name: ${model_name_or_path}
+    name: meta-llama/Llama-2-7b-hf
+    kwargs:
+      model_max_length: ${max_seq_len}
+-
+  model_name: meta-llama/Llama-2-7b-chat-hf
+  model:
+    name: hf_causal_lm
+    pretrained_model_name_or_path: meta-llama/Llama-2-7b-chat-hf
+    init_device: mixed
+    pretrained: true
+    trust_remote_code: true
+    use_auth_token: true
+  tokenizer:
+    name: meta-llama/Llama-2-7b-chat-hf
+    kwargs:
+      model_max_length: ${max_seq_len}
+-
+  model_name: meta-llama/Llama-2-13b-hf
+  model:
+    name: hf_causal_lm
+    pretrained_model_name_or_path: meta-llama/Llama-2-13b-hf
+    init_device: mixed
+    pretrained: true
+    trust_remote_code: true
+    use_auth_token: true
+  tokenizer:
+    name: meta-llama/Llama-2-13b-hf
+    kwargs:
+      model_max_length: ${max_seq_len}
+-
+  model_name: meta-llama/Llama-2-13b-chat-hf
+  model:
+    name: hf_causal_lm
+    pretrained_model_name_or_path: meta-llama/Llama-2-13b-chat-hf
+    init_device: mixed
+    pretrained: true
+    trust_remote_code: true
+    use_auth_token: true
+  tokenizer:
+    name: meta-llama/Llama-2-13b-chat-hf
     kwargs:
       model_max_length: ${max_seq_len}
 # # if you are evaluating more than one model, list them all as YAML blocks without variable interpolation
