@@ -1,6 +1,7 @@
-max_seq_len: 2048
+max_seq_len: 1024
 seed: 1
 precision: amp_fp16
+dist_timeout: 6000
 
 # If you are using one model, put it here:
 # otherwise, write a block for each model you want to test in the `models` section
