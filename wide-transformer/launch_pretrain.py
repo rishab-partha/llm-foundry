@@ -6,7 +6,7 @@ from mcli import RunConfig, create_run
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # System args
-    parser.add_argument("--cluster", type=str, default="r7z2")
+    parser.add_argument("--cluster", type=str, default="r9z1")
     parser.add_argument("--ngpus", type=int, default=32)
     parser.add_argument("--device-batch-size", type=int, default=None)
     parser.add_argument("--autoresume", action="store_true")
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     parser.add_argument("--local-debug", action="store_true")
 
     # Model args
-    parser.add_argument("--lrs", nargs="+", type=float, default=[4e-4, 2e-4, 1e-4])
+    parser.add_argument("--lrs", nargs="+", type=float, default=[4e-4])
     parser.add_argument("--batches", type=int ,required=True)
     parser.add_argument("--d-model", type=int, required=True)
     parser.add_argument("--n-layers", type=int, required=True)
@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    run_base = f"1B-dmodel-{args.d_model}-layers-{args.n_layers}-expansion-{args.expansion_ratio}-heads-{args.n_heads}"
+    run_base = f"1B-dmodel-{args.d_model}-layers-{args.n_layers}-expansion-{args.expansion_ratio}-ba-{args.batches}"
 
     for seed in args.seeds:
         for lr in args.lrs:
@@ -33,7 +33,7 @@ if __name__ == "__main__":
                 f"wide-transformer/yamls/pretrain/base.yaml")
 
             base_run.name = run_base.lower().replace(".", "-")
-            run_name = f"{run_base}-{lr:.6f}-ba-{args.batches}-sd-{seed}"
+            run_name = f"{run_base}-{lr:.6f}-heads-{args.n_heads}-sd-{seed}"
             base_run.parameters["run_name"] = run_name
 
             base_run.parameters["model"]["d_model"] = args.d_model
@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
             base_run.parameters["loggers"]["wandb"]["tags"] = [
                 "1B", "pile", f"dmodel-{args.d_model}", f"layers-{args.n_layers}",
-                f"expansion-{args.expansion_ratio}", f"lr-{lr}", "vary-dim", f"nheads-{args.n_heads}"
+                f"expansion-{args.expansion_ratio}", f"lr-{lr}", "vary-dim", f"nheads-{args.n_heads}", f"batches-{args.batches}",
             ]
 
             if args.cluster in ["r1z1", "r8z6"]:
