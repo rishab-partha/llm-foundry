@@ -89,6 +89,7 @@ device_eval_batch_size: 4
 fsdp_config:
   sharding_strategy: FULL_SHARD
   mixed_precision: FULL
+  sync_module_states: true
 
 icl_tasks: 'eval/yamls/tasks.yaml'
 model_gauntlet: 'eval/yamls/model_gauntlet.yaml'
