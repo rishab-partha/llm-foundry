@@ -18,6 +18,8 @@ models:
     use_auth_token: true
   tokenizer:
     name: meta-llama/Llama-2-70b-hf
+    trust_remote_code: true
+    use_auth_token: true
     kwargs:
       model_max_length: ${max_seq_len}
 -
@@ -31,6 +33,8 @@ models:
     use_auth_token: true
   tokenizer:
     name: meta-llama/Llama-2-70b-chat-hf
+    trust_remote_code: true
+    use_auth_token: true
     kwargs:
       model_max_length: ${max_seq_len}
 
