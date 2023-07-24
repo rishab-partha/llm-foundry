@@ -1,20 +1,22 @@
 integrations:
 - integration_type: git_repo
-  git_repo: mosaicml/llm-foundry
-  git_branch: v0.2.0
+  git_repo: rishab-partha/llm-foundry
+  git_branch: coding-demo
   # git_commit: # OR use your commit hash
   pip_install: -e ".[gpu]"
   ssh_clone: false # Should be true if using a private repo
 
 command: |
+  pip uninstall mosaicml
+  pip install git+https://github.com/rishab-partha/composer.git@code_eval_demo
   cd llm-foundry/scripts
   composer eval/eval.py /mnt/config/parameters.yaml
 
 # Mosaic Cloud will use run_name (with a unique suffix) to populate the env var $RUN_NAME
 run_name: all-eval
 gpu_num: 8
-# gpu_type:
-# cluster: # replace with your cluster here!
+gpu_type: a100_80gb
+cluster: r1z1
 
 image: mosaicml/llm-foundry:2.0.1_cu118-latest
 
@@ -28,19 +30,19 @@ parameters:
 
   models:
   -
-    model_name: mosaicml/mpt-7b-instruct
+    model_name: mosaicml/mpt-7b-chat
     # Tokenizer
     tokenizer:
       name: EleutherAI/gpt-neox-20b
       kwargs:
         model_max_length: ${max_seq_len}
 
-    model:
-      name: hf_causal_lm
-      pretrained_model_name_or_path: mosaicml/mpt-7b-instruct
-      init_device: cpu
-      pretrained: true
-      use_auth_token: false
+    # model:
+    #   name: hf_causal_lm
+    #   pretrained_model_name_or_path: mosaicml/mpt-7b-instruct
+    #   init_device: cpu
+    #   pretrained: true
+    #   use_auth_token: false
   # -
   #   model_name: falcon-40b
   #   # Tokenizer
