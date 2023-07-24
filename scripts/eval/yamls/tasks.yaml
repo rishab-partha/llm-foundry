@@ -1,4 +1,4 @@
-# icl_tasks:
+icl_tasks:
 # -
 #   label: jeopardy
 #   dataset_uri: eval/local_data/world_knowledge/jeopardy_all.jsonl # ADD YOUR OWN DATASET URI
