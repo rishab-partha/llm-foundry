@@ -37,12 +37,12 @@ parameters:
       kwargs:
         model_max_length: ${max_seq_len}
 
-    # model:
-    #   name: hf_causal_lm
-    #   pretrained_model_name_or_path: mosaicml/mpt-7b-instruct
-    #   init_device: cpu
-    #   pretrained: true
-    #   use_auth_token: false
+    model:
+      name: hf_causal_lm
+      pretrained_model_name_or_path: mosaicml/mpt-7b-chat
+      init_device: mixed
+      pretrained: true
+      use_auth_token: false
   # -
   #   model_name: falcon-40b
   #   # Tokenizer
