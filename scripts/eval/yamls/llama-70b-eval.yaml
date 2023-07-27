@@ -60,6 +60,8 @@ device_eval_batch_size: 4
 fsdp_config:
   sharding_strategy: FULL_SHARD
   mixed_precision: FULL
+  limit_all_gathers: true
+  forward_prefetch: true
   sync_module_states: true
 
 icl_tasks: 'eval/yamls/tasks.yaml'
