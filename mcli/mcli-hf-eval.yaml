@@ -1,20 +1,22 @@
 integrations:
 - integration_type: git_repo
-  git_repo: mosaicml/llm-foundry
-  git_branch: v0.2.0
+  git_repo: rishab-partha/llm-foundry
+  git_branch: toxicity-model-based
   # git_commit: # OR use your commit hash
   pip_install: -e ".[gpu]"
   ssh_clone: false # Should be true if using a private repo
 
 command: |
+  pip uninstall mosaicml -y
+  pip install git+https://github.com/rishab-partha/composer.git@model-based-eval
   cd llm-foundry/scripts
   composer eval/eval.py /mnt/config/parameters.yaml
 
 # Mosaic Cloud will use run_name (with a unique suffix) to populate the env var $RUN_NAME
 run_name: all-eval
 gpu_num: 8
-# gpu_type:
-# cluster: # replace with your cluster here!
+gpu_type: a100_40gb
+cluster: r8z2
 
 image: mosaicml/llm-foundry:2.0.1_cu118-latest
 
