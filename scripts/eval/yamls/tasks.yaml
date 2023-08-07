@@ -174,15 +174,15 @@ icl_tasks:
 #   icl_task_type: multiple_choice
 #   continuation_delimiter: "\nAnswer: " # this separates questions from answers
 -
-  label: toxicity
-  dataset_uri: eval/local_data/toxicity/processed_toxicity.jsonl # ADD YOUR OWN DATASET URI
-  num_fewshot: [0]
-  icl_task_type: toxicity
--
   label: relevance
   dataset_uri: eval/local_data/relevance_readability/processed_dolly.jsonl # ADD YOUR OWN DATASET URI
   num_fewshot: [0]
   icl_task_type: relevance
+-
+  label: toxicity
+  dataset_uri: eval/local_data/toxicity/processed_toxicity.jsonl # ADD YOUR OWN DATASET URI
+  num_fewshot: [0]
+  icl_task_type: toxicity
 -
   label: readability
   dataset_uri: eval/local_data/relevance_readability/processed_dolly.jsonl # ADD YOUR OWN DATASET URI
