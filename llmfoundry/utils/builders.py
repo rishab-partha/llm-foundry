@@ -187,6 +187,15 @@ def build_icl_evaluators(icl_tasks,
                 ]
             elif icl_cfg.icl_task_type == 'question_answering':
                 icl_cfg.metric_names = ['InContextLearningQAAccuracy']
+            elif icl_cfg.icl_task_type == 'toxicity':
+                icl_cfg.metric_names = ['InContextLearningToxicityMetric']
+                icl_cfg.icl_task_type = 'model_based'
+            elif icl_cfg.icl_task_type == 'relevance':
+                icl_cfg.metric_names = ['InContextLearningRelevanceMetric']
+                icl_cfg.icl_task_type = 'model_based'
+            elif icl_cfg.icl_task_type == 'readability':
+                icl_cfg.metric_names = ['InContextLearningFleschKincaidMetric']
+                icl_cfg.icl_task_type = 'model_based'
             else:
                 raise ValueError(
                     f'No metric_names defined, unable to build default metrics for icl_task_type={icl_cfg.icl_task_type}.'

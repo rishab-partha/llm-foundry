@@ -13,7 +13,10 @@ from composer.metrics.nlp import (InContextLearningLMAccuracy,
                                   InContextLearningMCExpectedCalibrationError,
                                   InContextLearningMultipleChoiceAccuracy,
                                   InContextLearningQAAccuracy,
-                                  LanguageCrossEntropy, LanguagePerplexity)
+                                  LanguageCrossEntropy, LanguagePerplexity, 
+                                  InContextLearningToxicityMetric, InContextLearningRelevanceMetric,
+                                  InContextLearningFleschKincaidMetric)
+
 from composer.utils import dist
 from omegaconf import DictConfig
 from transformers import (AutoConfig, AutoModelForCausalLM, PreTrainedTokenizer,
@@ -73,7 +76,10 @@ class ComposerHFCausalLM(HuggingFaceModelWithZLoss):
             InContextLearningMultipleChoiceAccuracy(),
             InContextLearningQAAccuracy(),
             InContextLearningLMExpectedCalibrationError(),
-            InContextLearningMCExpectedCalibrationError()
+            InContextLearningMCExpectedCalibrationError(),
+            InContextLearningToxicityMetric(),
+            InContextLearningRelevanceMetric(),
+            InContextLearningFleschKincaidMetric(),
         ]
 
         # if we are passed a DictConfig, we need to instantiate the model
