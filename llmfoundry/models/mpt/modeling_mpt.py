@@ -18,9 +18,9 @@ from composer.metrics import (InContextLearningLMAccuracy,
                               InContextLearningMCExpectedCalibrationError,
                               InContextLearningMultipleChoiceAccuracy,
                               InContextLearningQAAccuracy,
-                              InContextLearningToxicityMetric,
-                              InContextLearningRelevanceMetric,
-                              InContextLearningFleschKincaidMetric)
+                              InContextLearningToxicityAccuracy,
+                              InContextLearningRelevanceAccuracy,
+                              InContextLearningFleschKincaidAccuracy)
 from composer.metrics.nlp import LanguageCrossEntropy, LanguagePerplexity
 from composer.models import HuggingFaceModel
 from composer.utils import dist
@@ -697,9 +697,9 @@ class ComposerMPTCausalLM(HuggingFaceModel):
             InContextLearningQAAccuracy(),
             InContextLearningLMExpectedCalibrationError(),
             InContextLearningMCExpectedCalibrationError(),
-            InContextLearningToxicityMetric(),
-            InContextLearningRelevanceMetric(),
-            InContextLearningFleschKincaidMetric(),
+            InContextLearningToxicityAccuracy(),
+            InContextLearningRelevanceAccuracy(),
+            InContextLearningFleschKincaidAccuracy(),
         ]
 
         super().__init__(
