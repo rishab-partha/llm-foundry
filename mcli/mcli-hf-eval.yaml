@@ -1,20 +1,23 @@
 integrations:
 - integration_type: git_repo
-  git_repo: mosaicml/llm-foundry
-  git_branch: v0.2.0
+  git_repo: rishab-partha/llm-foundry
+  git_branch: add-coding-foundry
   # git_commit: # OR use your commit hash
   pip_install: -e ".[gpu]"
   ssh_clone: false # Should be true if using a private repo
 
 command: |
   cd llm-foundry/scripts
+  pip uninstall mosaicml -y
+  pip install git+https://github.com/rishab-partha/composer.git@fix-local-eval
+  EXPORT CODE_EVAL_DEVICE=LOCAL
   composer eval/eval.py /mnt/config/parameters.yaml
 
 # Mosaic Cloud will use run_name (with a unique suffix) to populate the env var $RUN_NAME
 run_name: all-eval
 gpu_num: 8
-# gpu_type:
-# cluster: # replace with your cluster here!
+gpu_type: a100_80gb
+cluster: r1z1
 
 image: mosaicml/llm-foundry:2.0.1_cu118-latest
 
