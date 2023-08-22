@@ -1,7 +1,7 @@
 integrations:
 - integration_type: git_repo
   git_repo: rishab-partha/llm-foundry
-  git_branch: add-coding-foundry
+  git_branch: test_coding
   # git_commit: # OR use your commit hash
   pip_install: -e ".[gpu]"
   ssh_clone: false # Should be true if using a private repo
@@ -10,7 +10,7 @@ command: |
   cd llm-foundry/scripts
   pip uninstall mosaicml -y
   pip install git+https://github.com/rishab-partha/composer.git@fix-local-eval
-  EXPORT CODE_EVAL_DEVICE=LOCAL
+  export CODE_EVAL_DEVICE=LOCAL
   composer eval/eval.py /mnt/config/parameters.yaml
 
 # Mosaic Cloud will use run_name (with a unique suffix) to populate the env var $RUN_NAME
@@ -26,12 +26,12 @@ parameters:
   dist_timeout: 6000
   seed: 1
   max_seq_len: 1024
-  device_eval_batch_size: 4
+  device_eval_batch_size: 2
   precision: amp_fp16
 
   models:
   -
-    model_name: mosaicml/mpt-7b-instruct
+    model_name: mosaicml/mpt-7b-chat
     # Tokenizer
     tokenizer:
       name: EleutherAI/gpt-neox-20b
@@ -40,8 +40,8 @@ parameters:
 
     model:
       name: hf_causal_lm
-      pretrained_model_name_or_path: mosaicml/mpt-7b-instruct
-      init_device: cpu
+      pretrained_model_name_or_path: mosaicml/mpt-7b-chat
+      init_device: mixed
       pretrained: true
       use_auth_token: false
   # -
@@ -288,6 +288,9 @@ parameters:
   fsdp_config:
     sharding_strategy: FULL_SHARD
     mixed_precision: FULL
+    sync_module_states: true
+    forward_prefetch: true
+    limit_all_gathers: true
 
   icl_tasks: 'eval/yamls/tasks.yaml'
   model_gauntlet: 'eval/yamls/model_gauntlet.yaml'
