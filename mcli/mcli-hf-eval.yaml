@@ -30,7 +30,7 @@ parameters:
 
   models:
   -
-    model_name: mosaicml/mpt-7b-chat
+    model_name: mosaicml/mpt-30b-chat
     # Tokenizer
     tokenizer:
       name: EleutherAI/gpt-neox-20b
@@ -39,7 +39,7 @@ parameters:
 
     model:
       name: hf_causal_lm
-      pretrained_model_name_or_path: mosaicml/mpt-7b-chat
+      pretrained_model_name_or_path: mosaicml/mpt-30b-chat
       init_device: mixed
       pretrained: true
       use_auth_token: false
